@@ -2,6 +2,7 @@ from enum import Enum
 import re
 
 class TokenType(Enum):
+    Keyword = 'keyword'
     Plus = 'plus'
     Minus = 'minus'
     Multiply = 'multiply'
@@ -34,7 +35,7 @@ patterns = {
     TokenType.Multiply: r'\*',
     TokenType.Divide: r'/',
     TokenType.WhiteSpace: r'\s',
-    TokenType.Number: r'\d+',
+    TokenType.Number: r'\d+', # probably should change + to *
     TokenType.Indentifier: r'[a-zA-Z_][a-zA-Z0-9_]*',
     TokenType.Assignment: r'=',
     TokenType.Operator: r'[><]',
@@ -47,14 +48,27 @@ patterns = {
     TokenType.NotEqual: r'!=',
 }
 
+keywords = {
+    'if',
+    'else',
+    'for',
+    'while',
+    'do',
+    'break',
+    'continue',
+}
+
+
 def main():
-    text = 'x = 3 + 4 * 5;'
+    text = 'for x = 3 + 4 * 5;'
     tokens = []
     i = 0
     while i < len(text):
         for token_type, pattern in patterns.items():
             match = re.match(pattern, text[i:])
             if match:
+                if match.group() in keywords:
+                    token_type = TokenType.Keyword
                 token = Token(token_type, match.group())
                 tokens.append(token)
                 i += match.end()
