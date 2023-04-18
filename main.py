@@ -59,8 +59,6 @@ def main():
                 tokens.append(token)
                 i += match.end()
                 break
-        else:
-            raise Exception(f'Unexpected character: {text[i]}')
     print(tokens)
 
 if __name__ == '__main__':
