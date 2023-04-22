@@ -1,4 +1,4 @@
-from Tokens import go_pattern as go
+from token import go_pattern as go
 import re
 
 class Token:
