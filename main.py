@@ -1,25 +1,5 @@
-from enum import Enum
+from Tokens import go_pattern as go
 import re
-
-class TokenType(Enum):
-    Keyword = 'keyword'
-    Plus = 'plus'
-    Minus = 'minus'
-    Multiply = 'multiply'
-    Divide = 'divide'
-    EOF = 'EOF'
-    WhiteSpace = 'whitespace'
-    Number = 'number'
-    Indentifier = 'identifier'
-    Assignment = 'assignment'
-    Operator = 'operator'
-    Semicolon = 'semicolon'
-    OpenParen = 'open_paren'
-    CloseParen = 'close_paren'
-    OpenCurly = 'open_curly'
-    CloseCurly = 'close_curly'
-    Equal = 'equal'
-    NotEqual = 'not_equal'
 
 class Token:
     def __init__(self, token_type, value):
@@ -28,39 +8,8 @@ class Token:
 
     def __repr__(self):
         return f'Token({self.token_type}, {self.value})'
-    
-patterns = {
-    TokenType.Plus: r'\+',
-    TokenType.Minus: r'-',
-    TokenType.Multiply: r'\*',
-    TokenType.Divide: r'/',
-    TokenType.WhiteSpace: r'\s',
-    TokenType.Number: r'\d+', # probably should change + to *
-    TokenType.Indentifier: r'[a-zA-Z_][a-zA-Z0-9_]*',
-    TokenType.Assignment: r'=',
-    TokenType.Operator: r'[><]',
-    TokenType.Semicolon: r';',
-    TokenType.OpenParen: r'\(',
-    TokenType.CloseParen: r'\)',
-    TokenType.OpenCurly: r'\{',
-    TokenType.CloseCurly: r'\}',
-    TokenType.Equal: r'==',
-    TokenType.NotEqual: r'!=',
-}
 
-keywords = {
-    'if',
-    'else',
-    'for',
-    'while',
-    'do',
-    'break',
-    'continue',
-}
-
-
-def main():
-    text = 'for x = 3 + 4 * 5;'
+def get_tokens(text, patterns, TokenType, keywords):
     tokens = []
     i = 0
     while i < len(text):
@@ -69,11 +18,20 @@ def main():
             if match:
                 if match.group() in keywords:
                     token_type = TokenType.Keyword
-                token = Token(token_type, match.group())
+                token = Token(token_type, '%r' % match.group())
+                print(token)
                 tokens.append(token)
                 i += match.end()
                 break
-    print(tokens)
+        else:
+            raise Exception(f'Invalid character: {text[i]}')
+    return tokens
 
+def main():
+    text =  ""
+    with open(r'test_code\go\1.go') as file:
+        text = file.read()
+    tokens = get_tokens(text, go.patterns, go.TokenType, go.keywords)
+    
 if __name__ == '__main__':
     main()
