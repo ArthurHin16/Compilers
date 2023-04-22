@@ -1,4 +1,4 @@
-from token import go_pattern as go
+from code_token import go_pattern as go
 import re
 
 class Token:
@@ -29,7 +29,8 @@ def get_tokens(text, patterns, TokenType, keywords):
 
 def main():
     text =  ""
-    with open(r'test_code\go\1.go') as file:
+    text_number = 2
+    with open(f'code_text/go/{text_number}.go') as file:
         text = file.read()
     tokens = get_tokens(text, go.patterns, go.TokenType, go.keywords)
     
